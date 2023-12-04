@@ -37,7 +37,8 @@ func NewEvaluator(logger *zap.Logger, store Storer) *Evaluator {
 func (e *Evaluator) Evaluate(ctx context.Context, flag *flipt.Flag, r *flipt.EvaluationRequest) (resp *flipt.EvaluationResponse, err error) {
 	// Flag should be of variant type by default. However, for maximum backwards compatibility
 	// on this layer, we will check against the integer value of the flag type.
-	if int(flag.Type) != 0 || flag.Type != flipt.FlagType_VARIANT_FLAG_TYPE {
+	if (int(flag.Type) != 0 || flag.Type != flipt.FlagType_VARIANT_FLAG_TYPE) &&
+		(int(flag.Type) != 1 || flag.Type != flipt.FlagType_BOOLEAN_FLAG_TYPE) {
 		resp = &flipt.EvaluationResponse{}
 		resp.Reason = flipt.EvaluationReason_ERROR_EVALUATION_REASON
 		return resp, errs.ErrInvalidf("flag type %s invalid", flag.Type)

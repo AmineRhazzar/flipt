@@ -28,6 +28,10 @@ func (s *Server) Variant(ctx context.Context, r *rpcevaluation.EvaluationRequest
 
 	s.logger.Debug("variant", zap.Stringer("request", r))
 
+	if flag.Type != flipt.FlagType_VARIANT_FLAG_TYPE {
+		return nil, errs.ErrInvalidf("flag type %s invalid", flag.Type)
+	}
+
 	resp, err := s.variant(ctx, flag, r)
 	if err != nil {
 		return nil, err
